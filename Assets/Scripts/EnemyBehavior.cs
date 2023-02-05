@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class EnemyBehavior : MonoBehaviour
 {
-    public AudioClip trumpSound;
+    public AudioSource audioPlayer;
     // Start is called before the first frame update
     void OnTriggerEnter(Collider other) 
     {
         if(other.name == "Player")
         {
             Debug.Log("STOP TOUCHING MEEEEEEEEEEEEEEEEE");
-            AudioSource.PlayClipAtPoint(trumpSound, transform.position, 1);
+            audioPlayer.Play();
         }
     }
 
