@@ -4,18 +4,37 @@ using UnityEngine;
 
 public class CameraBehavior : MonoBehaviour
 {
-    public Vector3 CamOffset = new Vector3(0f, 1.2f, 02.6f);
-    private Transform _target;
+    public float moveSpeed;
+    public float shiftAdditionalSpeed;
+    public float mouseSensitivity;
+    public bool invertMouse;
+    public bool autoLockCursor;
 
-    void Start()
+    private Camera cam;
+
+    void Awake()
     {
-        _target = GameObject.Find("Player").transform;
+        cam = this.gameObject.GetComponent<Camera>();
+        this.gameObject.name = "SpectatorCamera";
+        Cursor.lockState = (autoLockCursor) ? CursorLockMode.Locked : CursorLockMode.None;
     }
 
-    // Update is called once per frame
-    void LateUpdate()
+    void Update()
     {
-        this.transform.position = _target.TransformPoint(CamOffset);
-        this.transform.LookAt(_target);
+        float speed = (moveSpeed + (Input.GetAxis("Fire3") * shiftAdditionalSpeed));
+        this.gameObject.transform.Translate(Vector3.forward * speed * Input.GetAxis("Vertical"));
+        this.gameObject.transform.Translate(Vector3.right * speed * Input.GetAxis("Horizontal"));
+        this.gameObject.transform.Translate(Vector3.up * speed * (Input.GetAxis("Jump") + (Input.GetAxis("Fire1") * -1)));
+        this.gameObject.transform.Rotate(Input.GetAxis("Mouse Y") * mouseSensitivity * ((invertMouse) ? 1 : -1), Input.GetAxis("Mouse X") * mouseSensitivity * ((invertMouse) ? -1 : 1), 0);
+        this.gameObject.transform.localEulerAngles = new Vector3(this.gameObject.transform.localEulerAngles.x, this.gameObject.transform.localEulerAngles.y, 0);
+
+        if (Cursor.lockState == CursorLockMode.None && Input.GetMouseButtonDown(0))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else if (Cursor.lockState == CursorLockMode.Locked && Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 }
