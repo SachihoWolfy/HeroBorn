@@ -11,6 +11,8 @@ public class PlayerBehavior : MonoBehaviour
     public float DistanceToGround = 0.1f;
     public LayerMask GroundLayer;
     public ParticleSystem _ps;
+    public float shieldTimer;
+    public GameBehavior _gameManager;
 
     private CapsuleCollider _col;
     private bool _isCharging;
@@ -22,6 +24,10 @@ public class PlayerBehavior : MonoBehaviour
 
     void Start()
     {
+        _gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
+        shieldTimer = _gameManager.ShieldTimer;
+        _gameManager.Shield = 0;
+        _gameManager.FireRate = false;
         _rb = GetComponent<Rigidbody>();
         _col = GetComponent<CapsuleCollider>();
     }
@@ -35,26 +41,25 @@ public class PlayerBehavior : MonoBehaviour
         _isCharging = Input.GetKey(KeyCode.Space);
     }
     
-    void FixedUpdate()
+    void checkJump()
     {
-
         if (IsGrounded() && _isJumping)
         {
-            if( JumpChargeTime < 1)
+            if (JumpChargeTime < 1)
             {
                 _rb.AddForce(Vector3.up * JumpVelocity, ForceMode.Impulse);
             }
             else
-            { 
-            if(JumpChargeTime > 1.5f)
             {
-                JumpChargeTime = 1.5f;
-            }
+                if (JumpChargeTime > 1.5f)
+                {
+                    JumpChargeTime = 1.5f;
+                }
                 _rb.AddForce(Vector3.up * JumpVelocity * (JumpChargeTime * 2), ForceMode.Impulse);
                 _rb.AddForce(this.transform.forward * JumpVelocity * JumpChargeTime, ForceMode.Impulse);
             }
             _ps.Play(true);
-            
+
         }
         if (IsGrounded() && _isCharging)
         {
@@ -65,10 +70,47 @@ public class PlayerBehavior : MonoBehaviour
             JumpChargeTime = 0;
         }
         _isJumping = false;
+    }
+
+    void checkShield()
+    {
+        if (_gameManager.Shield < _gameManager.MaxShield)
+        {
+            if (shieldTimer > 0)
+            {
+                shieldTimer -= Time.deltaTime;
+                _gameManager.ShieldTimer -= (Time.deltaTime);
+            } 
+            else
+            {
+                shieldTimer = 20f;
+                _gameManager.Shield = _gameManager.MaxShield;
+            }
+        }
+    }
+    void FixedUpdate()
+    {
+        checkJump();
+        checkShield();
         Vector3 rotation = Vector3.up * _hInput;
         Quaternion angleRot = Quaternion.Euler(rotation * Time.fixedDeltaTime);
         _rb.MovePosition(this.transform.position + this.transform.forward * _vInput * Time.fixedDeltaTime);
         _rb.MoveRotation(_rb.rotation * angleRot);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.name == "Enemy" || collision.gameObject.name == "Enemy(Clone)" || collision.gameObject.name == "Enemy_Bullet(Clone)")
+        {
+            if(_gameManager.Shield != 0)
+            {
+                _gameManager.Shield -= 1;
+            }
+            else
+            {
+                _gameManager.HP -= 1;
+            }
+        }
     }
 
     private bool IsGrounded()

@@ -10,11 +10,32 @@ public class GameBehavior : MonoBehaviour
     private int _itemsCollected = 0;
     private int _playerHP = 10;
 
+    private int _maxShield = 0;
+    private int _currentShield = 0;
+    private float _shieldTimer = 20f;
+    private int _shieldTimerDefault = 20;
+
+    private bool _fireRateBuff = false;
+    private int _fireRateBuff_Time = 20;
+
+    private int _enemiesDefeated = 0;
+
     public Button WinButton;
     public int MaxItems = 4;
+    public int MaxEnemies = 10;
     public TMP_Text HealthText;
     public TMP_Text ItemText;
     public TMP_Text ProgressText;
+    public TMP_Text FireRateText;
+    public TMP_Text ShieldText;
+    public TMP_Text EnemyText;
+    public Button LossButton;
+
+    public void UpdateScene(string updatedText)
+    {
+        ProgressText.text = updatedText;
+        Time.timeScale = 0f;
+    }
     public int Items
     {
         get { return _itemsCollected; }
@@ -22,7 +43,7 @@ public class GameBehavior : MonoBehaviour
         {
             _itemsCollected = value;
             ItemText.text = "Items Collected: " + Items;
-            if(_itemsCollected >= MaxItems)
+            /*if(_itemsCollected >= MaxItems)
             {
                 ProgressText.text = "You've Found all the items! (PlaceHolder task)";
                 WinButton.gameObject.SetActive(true);
@@ -31,10 +52,105 @@ public class GameBehavior : MonoBehaviour
             else
             {
                 ProgressText.text = "Item found, only " + (MaxItems - _itemsCollected) + " more! (Placeholder task)";
+            }*/
+        }
+    }
+
+
+    public int EnemiesDefeated
+    {
+        get { return _enemiesDefeated; }
+        set
+        {
+            _enemiesDefeated = value;
+            EnemyText.text = "Enemies Defeated: " + _enemiesDefeated;
+            if (_enemiesDefeated >= MaxEnemies)
+            {
+                UpdateScene("You've killed " + MaxEnemies + " Enemies!");
+                WinButton.gameObject.SetActive(true);
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                ProgressText.text = (MaxEnemies - _enemiesDefeated) + " Enemies Left.";
             }
         }
     }
 
+    public int FR_Buff_Time
+    {
+        get { return _fireRateBuff_Time; }
+        set { _fireRateBuff_Time = value; }
+    }
+
+    public bool FireRate
+    {
+        get { return _fireRateBuff; }
+        set
+        {
+            _fireRateBuff = value;
+            if (_fireRateBuff == true)
+            {
+                FireRateText.text = "FireRate Buffed: Yes";
+            }
+            else
+            {
+                FireRateText.text = "FireRate Buffed: No";
+            }
+        }
+    }
+    public float ShieldTimer
+    {
+        get { return _shieldTimer; }
+        set
+        { 
+            _shieldTimer = value;
+            if (_currentShield > _maxShield)
+            {
+                _currentShield = _maxShield;
+            }
+            if (_currentShield < 1)
+            {
+                ShieldText.text = "Shield Recharging: " + (int)_shieldTimer;
+            }
+            else
+            {
+                ShieldText.text = "Shield: " + _currentShield;
+            }
+        }
+    }
+
+    public int ShieldTimerDefault
+    {
+        get { return _shieldTimerDefault; }
+        set
+        { _shieldTimerDefault = value; }
+    }
+    public int MaxShield
+    {
+        get { return _maxShield; }
+        set { _maxShield = value; }
+    }
+    public int Shield
+    {
+        get { return _currentShield; }
+        set
+        {
+            _currentShield = value;
+            if(_currentShield > _maxShield)
+            {
+                _currentShield = _maxShield;
+            }
+            if(_currentShield < 1)
+            {
+                ShieldText.text = "Shield Recharging: " + _shieldTimer;
+            }
+            else
+            {
+                ShieldText.text = "Shield: " + _currentShield;
+            }
+        }
+    }
     public int HP
     {
         get { return _playerHP; }
@@ -51,6 +167,9 @@ public class GameBehavior : MonoBehaviour
             else
             {
                 HealthText.text = "Health: You suck.";
+                UpdateScene("--You blew it--");
+                LossButton.gameObject.SetActive(true);
+                Time.timeScale = 0;
             }
         }
     }
