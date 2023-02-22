@@ -34,12 +34,12 @@ public class EnemyBehavior : MonoBehaviour
                 }
                 
                 _rb.constraints = RigidbodyConstraints.None;
-                Invoke("enemyDestroy", 3 );
+                Invoke("EnemyDestroy", 3 );
 
             }
         }
     }
-    public void enemyDestroy()
+    public void EnemyDestroy()
     {
         Destroy(this.gameObject);
         Debug.Log("Enemy down");

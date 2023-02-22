@@ -4,11 +4,13 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using CustomExtensions;
 
-public class GameBehavior : MonoBehaviour
+public class GameBehavior : MonoBehaviour, IManager
 {
     private int _itemsCollected = 0;
     private int _playerHP = 10;
+    public int maxHP = 10;
 
     private int _maxShield = 0;
     private int _currentShield = 0;
@@ -30,6 +32,14 @@ public class GameBehavior : MonoBehaviour
     public TMP_Text ShieldText;
     public TMP_Text EnemyText;
     public Button LossButton;
+
+    private string _state;
+
+    public string State
+    {
+        get { return _state; }
+        set { _state = value; }
+    }
 
     public void UpdateScene(string updatedText)
     {
@@ -157,6 +167,11 @@ public class GameBehavior : MonoBehaviour
         set
         {
             _playerHP = value;
+            if(_playerHP > maxHP)
+            {
+                _playerHP = maxHP;
+                Debug.Log("Health exceeded max, reverted health to maxHP.");
+            }
             Debug.LogFormat("Lives: {0}", _playerHP);
 
             if (HP > 0)
@@ -176,16 +191,22 @@ public class GameBehavior : MonoBehaviour
 
     public void RestartScene()
     {
-        SceneManager.LoadScene(0);
-        Time.timeScale = 1f;
+        Utilities.RestartLevel(0);
     }
     // Start is called before the first frame update
     void Start()
     {
         ItemText.text += _itemsCollected;
         HealthText.text += _playerHP;
+        Initialize();
     }
 
+    public void Initialize()
+    {
+        _state = "Game Managager Initialized...";
+        _state.FancyDebug();
+        Debug.Log(_state);
+    }
     // Update is called once per frame
     void Update()
     {

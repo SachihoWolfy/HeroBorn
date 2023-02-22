@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[RequireComponent(typeof(AudioSource))]
 public class ItemBehavior : MonoBehaviour
 {
     public GameBehavior GameManager;
+    public AudioClip itemSound;
     public int ItemID = 999;
     // Start is called before the first frame update
 
@@ -44,6 +45,7 @@ public class ItemBehavior : MonoBehaviour
             default:
                 break;
         }
+
     }
     void Start()
     {

@@ -10,8 +10,6 @@ public class EnemyGunBehavior : MonoBehaviour
     public float _timer = 2f;
     public bool canShoot;
 
-    private float BuffTimer = 20f;
-
     private bool _isShooting;
     void Start()
     {

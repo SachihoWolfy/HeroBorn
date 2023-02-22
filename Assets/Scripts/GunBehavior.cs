@@ -40,6 +40,7 @@ public class Gun_Script : MonoBehaviour
         {
             GunStatus.text = "GUN: RECHARGING...";
         }
+
     }
 
     private void FixedUpdate()

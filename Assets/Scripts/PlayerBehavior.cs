@@ -14,11 +14,21 @@ public class PlayerBehavior : MonoBehaviour
     public float shieldTimer;
     public GameBehavior _gameManager;
 
+    public AudioClip hurt_s;
+    public AudioClip hurt;
+    public AudioClip fr_get;
+    public AudioClip fr_lose;
+    public AudioClip die;
+    public AudioClip jump;
+    public AudioClip jumpL;
+
+
     private CapsuleCollider _col;
     private bool _isCharging;
     private bool _isJumping;
     private float _vInput;
     private float _hInput;
+    private AudioSource _as;
 
     private Rigidbody _rb;
 
@@ -30,6 +40,7 @@ public class PlayerBehavior : MonoBehaviour
         _gameManager.FireRate = false;
         _rb = GetComponent<Rigidbody>();
         _col = GetComponent<CapsuleCollider>();
+        _as = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -48,6 +59,7 @@ public class PlayerBehavior : MonoBehaviour
             if (JumpChargeTime < 1)
             {
                 _rb.AddForce(Vector3.up * JumpVelocity, ForceMode.Impulse);
+                _as.PlayOneShot(jump);
             }
             else
             {
@@ -57,6 +69,7 @@ public class PlayerBehavior : MonoBehaviour
                 }
                 _rb.AddForce(Vector3.up * JumpVelocity * (JumpChargeTime * 2), ForceMode.Impulse);
                 _rb.AddForce(this.transform.forward * JumpVelocity * JumpChargeTime, ForceMode.Impulse);
+                _as.PlayOneShot(jumpL);
             }
             _ps.Play(true);
 
@@ -84,6 +97,7 @@ public class PlayerBehavior : MonoBehaviour
             else
             {
                 shieldTimer = 20f;
+                _gameManager.ShieldTimer = shieldTimer;
                 _gameManager.Shield = _gameManager.MaxShield;
             }
         }
@@ -100,16 +114,42 @@ public class PlayerBehavior : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.name == "Enemy" || collision.gameObject.name == "Enemy(Clone)" || collision.gameObject.name == "Enemy_Bullet(Clone)")
+        string n = collision.gameObject.name;
+        if(n == "Enemy" || n == "Enemy(Clone)" || n == "Enemy_Bullet(Clone)")
         {
             if(_gameManager.Shield != 0)
             {
                 _gameManager.Shield -= 1;
+                _as.PlayOneShot(hurt_s);
             }
             else
             {
                 _gameManager.HP -= 1;
+                _as.PlayOneShot(hurt);
             }
+        }
+        if (n == "Firerate_Pickup")
+        {
+            if (collision.gameObject.GetComponent<ItemBehavior>().itemSound == null)
+            {
+                Debug.LogError("Item Sound is NULL");
+            }
+            else
+            {
+                _as.PlayOneShot(collision.gameObject.GetComponent<ItemBehavior>().itemSound, 0.3f);
+            }
+        }
+        if(n == "Health_Pickup" || n == "Shield_Pickup")
+        {
+            if (collision.gameObject.GetComponent<ItemBehavior>().itemSound == null)
+            {
+                Debug.LogError("Item Sound is NULL");
+            }
+            else
+            {
+                _as.PlayOneShot(collision.gameObject.GetComponent<ItemBehavior>().itemSound);
+            }
+            
         }
     }
 
