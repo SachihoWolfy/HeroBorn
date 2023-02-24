@@ -136,7 +136,7 @@ public class PlayerBehavior : MonoBehaviour
             }
             else
             {
-                _as.PlayOneShot(collision.gameObject.GetComponent<ItemBehavior>().itemSound, 0.3f);
+                _as.PlayOneShot(collision.gameObject.GetComponent<ItemBehavior>().itemSound, 0.5f);
             }
         }
         if(n == "Health_Pickup" || n == "Shield_Pickup")

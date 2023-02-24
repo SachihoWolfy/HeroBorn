@@ -11505,7 +11505,7 @@ MonoBehaviour:
   _gameManager: {fileID: 0}
   hurt_s: {fileID: 8300000, guid: dab38308ea585324eae1b2e044ba3122, type: 3}
   hurt: {fileID: 8300000, guid: a45ec0cc3571a644d8abeae8647b74f2, type: 3}
-  fr_get: {fileID: 0}
+  fr_get: {fileID: 8300000, guid: 7a9fbea195a47f646a6ec1bb148893a5, type: 3}
   fr_lose: {fileID: 0}
   die: {fileID: 0}
   jump: {fileID: 8300000, guid: 945bc632c2687734891463e93d0dbff0, type: 3}
@@ -20063,7 +20063,7 @@ PrefabInstance:
     - target: {fileID: 8170008664469269245, guid: 1be38c0d96ed77e448a675bc7f5982a1, type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: 73853b44788dad44aa6d0900122cb067, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 8170008664469269245, guid: 1be38c0d96ed77e448a675bc7f5982a1, type: 3}
       propertyPath: BypassEffects
       value: 0
@@ -20075,7 +20075,7 @@ PrefabInstance:
     - target: {fileID: 8971270015546400645, guid: 1be38c0d96ed77e448a675bc7f5982a1, type: 3}
       propertyPath: itemSound
       value: 
-      objectReference: {fileID: 8300000, guid: 73853b44788dad44aa6d0900122cb067, type: 3}
+      objectReference: {fileID: 8300000, guid: 7a9fbea195a47f646a6ec1bb148893a5, type: 3}
     - target: {fileID: 8971270015546400646, guid: 1be38c0d96ed77e448a675bc7f5982a1, type: 3}
       propertyPath: m_Name
       value: Firerate_Pickup

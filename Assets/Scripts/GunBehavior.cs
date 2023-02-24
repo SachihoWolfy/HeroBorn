@@ -30,7 +30,7 @@ public class Gun_Script : MonoBehaviour
         {
             _timer -= Time.deltaTime;
         }
-        _isShooting |= Input.GetKey(KeyCode.RightShift);
+        _isShooting |= (Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.Return));
         canShoot = GameManager.FireRate || _timer <= 0;
         if (canShoot)
         {
