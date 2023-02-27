@@ -258,7 +258,7 @@ VideoPlayer:
   m_AudioOutputMode: 2
   m_TargetAudioSources: []
   m_DirectAudioVolumes: []
-  m_Url: https://github.com/SachihoWolfy/Novaborn-TitleScreen/blob/main/TI_M02_PR06.mp4?raw=true
+  m_Url: https://sachihowolfy.github.io/Novaborn-TitleScreen/TI_M02_PR06.mp4
   m_EnabledAudioTracks: 
   m_DirectAudioMutes: 
   m_ControlledAudioTrackCount: 0
