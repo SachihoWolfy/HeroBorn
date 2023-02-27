@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[RequireComponent(typeof(AudioSource))]
 public class EnemyGunBehavior : MonoBehaviour
 {
     public GameObject Enemy_Bullet;
@@ -9,11 +9,13 @@ public class EnemyGunBehavior : MonoBehaviour
     public float shootTime = 2f;
     public float _timer = 2f;
     public bool canShoot;
+    public AudioClip fire;
+    public AudioSource sounds;
 
     private bool _isShooting;
     void Start()
     {
-
+        sounds = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -36,6 +38,7 @@ public class EnemyGunBehavior : MonoBehaviour
             BulletRB.velocity = this.transform.forward * BulletSpeed;
             canShoot = false;
             _timer = 4f;
+            sounds.PlayOneShot(fire);
         }
         _isShooting = false;
     }

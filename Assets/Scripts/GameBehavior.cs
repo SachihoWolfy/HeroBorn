@@ -41,6 +41,20 @@ public class GameBehavior : MonoBehaviour, IManager
         set { _state = value; }
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            SceneManager.LoadScene("SampleScene");
+            Time.timeScale = 1.0f;
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            SceneManager.LoadScene("Level_Road");
+            Time.timeScale = 1.0f;
+        }
+    }
+
     public void UpdateScene(string updatedText)
     {
         ProgressText.text = updatedText;
@@ -208,8 +222,4 @@ public class GameBehavior : MonoBehaviour, IManager
         Debug.Log(_state);
     }
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

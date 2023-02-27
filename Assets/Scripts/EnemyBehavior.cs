@@ -10,6 +10,8 @@ public class EnemyBehavior : MonoBehaviour
     public Transform PatrolRoute;
     public List<Transform> Locations;
     public bool _triggered = false;
+    public AudioClip hurt;
+    public AudioClip death;
 
     public GameBehavior _gameManager;
 
@@ -30,6 +32,7 @@ public class EnemyBehavior : MonoBehaviour
             {
                 if(_agent != null)
                 {
+                    audioPlayer.PlayOneShot(death);
                     Destroy(_agent);
                 }
                 
@@ -56,7 +59,7 @@ public class EnemyBehavior : MonoBehaviour
             }
             _triggered = true;
             Debug.Log("Detected");
-            audioPlayer.Play();
+            audioPlayer.Play(0);
         }
     }
 
@@ -74,8 +77,7 @@ public class EnemyBehavior : MonoBehaviour
         Player = GameObject.Find("Player").transform;
         PatrolRoute = GameObject.Find("Patrol_Route").transform;
         _gameManager = GameObject.Find("Game Manager").GetComponent<GameBehavior>();
-        InitializePatrolRoute();
-        MoveToNextPatrolLocation();
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -84,36 +86,16 @@ public class EnemyBehavior : MonoBehaviour
         {
             EnemyLives -= 1;
             Debug.Log("HIT!");
+            audioPlayer.PlayOneShot(hurt);
         }
     }
 
-    void InitializePatrolRoute()
-    {
-        foreach(Transform child in PatrolRoute)
-        {
-            Locations.Add(child);
-        }
-    }
-
-    void MoveToNextPatrolLocation()
-    {
-        if (Locations.Count == 0)
-            return;
-
-        _agent.destination = Locations[_locationIndex].position;
-        _locationIndex = (_locationIndex + 1) % Locations.Count;
-    }
 
     // Update is called once per frame
     void Update()
     {
         if(_agent != null)
         {
-            if (_agent.remainingDistance < 0.2f && !_agent.pathPending && !_triggered)
-            {
-                MoveToNextPatrolLocation();
-            }
-            else
                 _agent.destination = Player.position;
         }
         
