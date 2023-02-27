@@ -13,6 +13,19 @@ public class Level_Selector : MonoBehaviour
         
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            SceneManager.LoadScene("SampleScene");
+            Time.timeScale = 1.0f;
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            SceneManager.LoadScene("Level_Road");
+            Time.timeScale = 1.0f;
+        }
+    }
     public void OpenScene()
     {
         SceneManager.LoadScene(sceneName);
